@@ -30,6 +30,15 @@ filterOnType = (arr) => {
 }
 
 const filterArray = (arr, typeFilter) => {
+  assert(!Array.isArray(arr), 'Переданные данные не являются массивом');
+  assert(
+    (
+      arr.includes(null)
+      || arr.includes(undefined)
+      || arr.includes(NaN)
+    ),
+    'Неправильный формат данных уберить undefined, NaN или null',
+  );
   assert(arr.length <= 0, 'Переданный массив пуст');
   assert(!typeFilter, 'Тип фильтра не указан');
 
@@ -38,11 +47,15 @@ const filterArray = (arr, typeFilter) => {
   if (typeFilter === 'filterOnType') {
     resultFunction = filterOnType(arr);
   } else if (typeFilter === 'filterForMoreOrLess') {
+    assert(
+      arr.find((item) =>  typeof item !== 'string'),
+      'Этот тип фильтра принимает только строки',
+    );
     resultFunction = filterForMoreOrLess(arr);
   }
 
   return resultFunction;
 }
 
-console.log(filterArray([123, '123', '321', () => {}, 9000, {}, []], 'filterOnType'));
+console.log(filterArray(['123'], 'filterOnType'));
 console.log(filterArray(['123', '1', 'Hello!', '', 'Hello!', 'Hello!'], 'filterForMoreOrLess'));
